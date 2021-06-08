@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/08 15:02:11 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:18:52 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,15 @@ int	get_next_line(int fd, char **line)
 	if (fd < 0)
 		return (-1);
 	myline = ft_calloc(BUFFER_SIZE, sizeof(char));
-	while (arq != 0)
+	while (arq != 0 && count < BUFFER_SIZE - 1)
 	{
 		if (arq < 0)
 			return (-1);
 		arq = read(fd, &myline[count], 1);
 		if (myline[count++] == '\n')
 		{
-			*line = myline;
-			ft_bzero(myline, count);
-			count = 0
+			count--;
+			break ;
 		}
 	}
 	myline[count] = 0;
