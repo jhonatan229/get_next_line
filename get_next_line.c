@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/08 14:43:54 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:48:49 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	get_next_line(int fd, char **line)
 			return (-1);
 		arq = read(fd, &myline[count], 1);
 		if (myline[count++] == '\n')
-			break ;q
+			break ;
 	}
 	myline[count] = 0;
 	*line = myline;

@@ -4,6 +4,7 @@
 
 # include <stdlib.h>
 # include <stddef.h>
+# include <unistd.h>
 
 int		get_next_line(int fd, char **line);
 void	*ft_calloc(size_t nmemb, size_t size);
