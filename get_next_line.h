@@ -5,9 +5,12 @@
 # include <stdlib.h>
 # include <stddef.h>
 # include <unistd.h>
+# include <fcntl.h>
 
-int		get_next_line(int fd, char **line);
-void	*ft_calloc(size_t nmemb, size_t size);
-void	ft_bzero(void *s, size_t n);
+int			get_next_line(int fd, char **line);
+void		*ft_memcpy(void *to, const void *from, size_t numBytes);
+char		*ft_strdup(const char *s);
+size_t		ft_strlen(const char *str);
+char		*ft_strjoin(char const *s1, char const *s2);
 
 #endif
