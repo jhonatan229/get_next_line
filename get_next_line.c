@@ -6,12 +6,11 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/09 18:51:45 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/09 19:37:16 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
 static char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -84,23 +83,4 @@ int	get_next_line(int fd, char **line)
 	free(buf);
 	strstatic = addline(strstatic, *&line, point);
 	return (rslt);
-}
-
-int main()
-{
-	int fd1 = open("text.txt", O_RDONLY);
-
-    char *line;
-    
-    get_next_line(fd1, &line);
-    printf("resposta: %s\n", line);
-    get_next_line(fd1, &line);
-    printf("resposta: %s\n", line);
-    get_next_line(fd1, &line);
-    printf("resposta: %s\n", line);
-	get_next_line(fd1, &line);
-    printf("resposta: %s\n", line);
-
-    close(fd1);
-    free(line);
 }
