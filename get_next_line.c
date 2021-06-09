@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/09 17:54:20 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/09 18:51:45 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,26 @@ static int findc(char *s, char c)
 	return (0);
 }
 
+static char *addline (char *str, char **line, int point)
+{
+	int count;
+	count = findc(str, '\n');
+	if (count == 0 && point == 0)
+		count = ft_strlen(str);
+	*line = ft_substr(str, 0, count);
+	return (ft_substr(str, count + 1, ft_strlen(str)));
+}
+
 int	get_next_line(int fd, char **line)
 {
 	int			point;
 	char		*buf;
 	static char	*strstatic;
-	int			count;
 	int			rslt;
 
 	rslt = 0;
 	buf = malloc(BUFFER_SIZE + 1);
 	point = read(fd, buf, BUFFER_SIZE);
-	printf("point = %i\n", point);
 	while (point > 0)
 	{
 		if (strstatic == NULL)
@@ -74,11 +82,7 @@ int	get_next_line(int fd, char **line)
 		point = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
-	count = findc(strstatic, '\n');
-	if (count == 0 && point == 0)
-		count = ft_strlen(strstatic);
-	*line = ft_substr(strstatic, 0, count);
-	strstatic = ft_substr(strstatic, count + 1, ft_strlen(strstatic));
+	strstatic = addline(strstatic, *&line, point);
 	return (rslt);
 }
 
@@ -89,15 +93,13 @@ int main()
     char *line;
     
     get_next_line(fd1, &line);
-    printf("%s\n", line);
+    printf("resposta: %s\n", line);
     get_next_line(fd1, &line);
-    printf("%s\n", line);
+    printf("resposta: %s\n", line);
     get_next_line(fd1, &line);
-    printf("%s\n", line);
+    printf("resposta: %s\n", line);
 	get_next_line(fd1, &line);
-    printf("%s\n", line);
-	get_next_line(fd1, &line);
-    printf("%s\n", line);
+    printf("resposta: %s\n", line);
 
     close(fd1);
     free(line);
