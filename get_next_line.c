@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/09 22:59:26 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/10 16:56:54 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 	sub = malloc(len + 1);
 	if (sub == NULL || s == NULL)
 		return (NULL);
-	if (start >= ft_strlen(s))
+	if (start >= ft_strlen(s))	
 		return (sub);
 	while (psub < len && s[start] != 0)
 	{
@@ -49,16 +49,27 @@ static int findc(char *s, char c)
 
 static char *addline (char *str, char **line, int point)
 {
-	int count;
-	
+	int	count;
+	int	len;
+
 	count = findc(str, '\n');
-	if (count == 0 && point == 0 && str[0] != '\n')
-		count = ft_strlen(str);
-	if (str[0] != '\n')
+	len = ft_strlen(str);
+	if (*str == 0 || *str == '\n')
+	{
+		count = 0;
 		*line = ft_substr(str, 0, count);
+	}
+	else if (point == 0 && count == -1)
+	{
+		count = len;
+		*line = ft_substr(str, 0, count);
+		return (0);
+	}
 	else
-		*line = "\n";
-	return (ft_substr(str, count + 1, ft_strlen(str) - count));
+		*line = ft_substr(str, 0, count);
+	if (count + 1 < len)
+		return (ft_substr(str, count + 1, len));
+	return (0);
 }
 
 int	get_next_line(int fd, char **line)
@@ -77,7 +88,7 @@ int	get_next_line(int fd, char **line)
 	while (point > 0)
 	{
 		buf[point] = 0;
-		if (strstatic == NULL)
+		if (strstatic == NULL || strstatic[0] == '\n')
 			strstatic = ft_strdup(buf);
 		else
 		{
@@ -93,6 +104,8 @@ int	get_next_line(int fd, char **line)
 		point = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
-	strstatic = addline(strstatic, *&line, point);
+	back = addline(strstatic, *&line, point);
+	free(strstatic);
+	strstatic = back;
 	return (rslt);
 }
