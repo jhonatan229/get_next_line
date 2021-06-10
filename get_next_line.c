@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/09 21:20:03 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/09 22:59:26 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 		return (NULL);
 	if (start >= ft_strlen(s))
 		return (sub);
-	while (psub < len)
+	while (psub < len && s[start] != 0)
 	{
 		sub[psub] = s[start];
 		start++;
@@ -50,15 +50,15 @@ static int findc(char *s, char c)
 static char *addline (char *str, char **line, int point)
 {
 	int count;
-
+	
 	count = findc(str, '\n');
-	if (count == 0 && point == 0 && str[count] != '\n')
+	if (count == 0 && point == 0 && str[0] != '\n')
 		count = ft_strlen(str);
-	if (str[count] == '\n')
-		*line = "\n";
-	else
+	if (str[0] != '\n')
 		*line = ft_substr(str, 0, count);
-	return (ft_substr(str, count + 1, ft_strlen(str) - (count + 1)));
+	else
+		*line = "\n";
+	return (ft_substr(str, count + 1, ft_strlen(str) - count));
 }
 
 int	get_next_line(int fd, char **line)
@@ -85,7 +85,7 @@ int	get_next_line(int fd, char **line)
 			free(strstatic);
 			strstatic = back;
 		}
-		if (findc(strstatic, '\n') > -1)
+		if (findc(strstatic, '\n') != -1)
 		{
 			rslt = 1;
 			break ;
