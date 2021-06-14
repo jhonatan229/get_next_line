@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/14 12:04:06 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/14 12:53:51 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 	sub = malloc(len + 1);
 	if (sub == NULL || s == NULL)
 		return (NULL);
-	if (start >= ft_strlen(s))	
+	if (start >= ft_strlen(s))
 		return (sub);
 	while (psub < len && s[start] != 0)
 	{
@@ -33,7 +33,7 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (sub);
 }
 
-static int findc(char *s, char c)
+static int	findc(char *s, char c)
 {
 	int	count;
 
@@ -47,7 +47,7 @@ static int findc(char *s, char c)
 	return (-1);
 }
 
-static char *addline (char *str, char **line, int point, int *rslt)
+static char	*addline (char *str, char **line, int point, int *rslt)
 {
 	int	count;
 	int	len;
@@ -75,6 +75,27 @@ static char *addline (char *str, char **line, int point, int *rslt)
 	return (0);
 }
 
+static int	save_in_static(int point, char **str, char *buf, int *rslt)
+{
+	char	*back;
+
+	buf[point] = 0;
+	if (*str == NULL)
+		*str = ft_strdup(buf);
+	else
+	{
+		back = ft_strjoin(*str, buf);
+		free(*str);
+		*str = back;
+	}
+	if (findc(*str, '\n') != -1)
+	{
+		*rslt = 1;
+		return (1);
+	}
+	return (0);
+}
+
 int	get_next_line(int fd, char **line)
 {
 	int			point;
@@ -83,31 +104,17 @@ int	get_next_line(int fd, char **line)
 	int			rslt;
 	char		*back;
 
-	if (BUFFER_SIZE <= 0)
-		return (-1);
 	rslt = 0;
 	buf = malloc(BUFFER_SIZE + 1);
-	if (buf == NULL)
+	if (buf == NULL || fd < 0 || BUFFER_SIZE <= 0)
 		return (-1);
 	point = read(fd, buf, BUFFER_SIZE);
 	if (point < 0 || line == NULL)
 		return (-1);
 	while (point > 0)
 	{
-		buf[point] = 0;
-		if (strstatic == NULL)
-			strstatic = ft_strdup(buf);
-		else
-		{
-			back = ft_strjoin(strstatic, buf);
-			free(strstatic);
-			strstatic = back;
-		}
-		if (findc(strstatic, '\n') != -1)
-		{
-			rslt = 1;
+		if (save_in_static(point, &strstatic, buf, &rslt) == 1)
 			break ;
-		}
 		point = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
