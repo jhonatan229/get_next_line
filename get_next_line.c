@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/14 13:32:51 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/14 13:46:19 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	get_next_line(int fd, char **line)
 		point = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
-	if (point < 0 || line == NULL)
+	if (point < 0 || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
 	back = addline(strstatic, *&line, point, &rslt);
 	free(strstatic);
