@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/11 10:52:56 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/14 11:46:25 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,18 @@ static char *addline (char *str, char **line, int point)
 	int	count;
 	int	len;
 
-	if ((str == NULL && point == 0) || *str == '\n')
+	if (str == NULL && point == 0)
 	{
 		*line = ft_strdup("");
 		return (0);
 	}
 	count = findc(str, '\n');
 	len = ft_strlen(str);
-	if (point == 0 && count == -1)
+	if (*str == '\n')
+		*line = ft_strdup("");
+	else if (point == 0 && count < 1)
 	{
-		count = len;
-		*line = ft_substr(str, 0, count);
+		*line = ft_substr(str, 0, len);
 		return (0);
 	}
 	else
@@ -92,7 +93,7 @@ int	get_next_line(int fd, char **line)
 	while (point > 0)
 	{
 		buf[point] = 0;
-		if (strstatic == NULL || strstatic[0] == '\n')
+		if (strstatic == NULL)
 			strstatic = ft_strdup(buf);
 		else
 		{
