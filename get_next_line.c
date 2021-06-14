@@ -6,7 +6,7 @@
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/14 12:53:51 by jestevam         ###   ########.fr       */
+/*   Updated: 2021/06/14 13:32:51 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,9 @@ int	get_next_line(int fd, char **line)
 
 	rslt = 0;
 	buf = malloc(BUFFER_SIZE + 1);
-	if (buf == NULL || fd < 0 || BUFFER_SIZE <= 0)
+	if (buf == NULL)
 		return (-1);
 	point = read(fd, buf, BUFFER_SIZE);
-	if (point < 0 || line == NULL)
-		return (-1);
 	while (point > 0)
 	{
 		if (save_in_static(point, &strstatic, buf, &rslt) == 1)
@@ -118,6 +116,8 @@ int	get_next_line(int fd, char **line)
 		point = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
+	if (point < 0 || line == NULL)
+		return (-1);
 	back = addline(strstatic, *&line, point, &rslt);
 	free(strstatic);
 	strstatic = back;
