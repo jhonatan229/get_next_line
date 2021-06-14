@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jestevam < jestevam@student.42sp.org.br    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/07 16:37:56 by jestevam          #+#    #+#             */
-/*   Updated: 2021/06/14 15:57:57 by jestevam         ###   ########.fr       */
+/*   Created: 2021/06/14 15:57:37 by jestevam          #+#    #+#             */
+/*   Updated: 2021/06/14 19:00:14 by jestevam         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -47,39 +47,38 @@ static int	findc(char *s, char c)
 	return (-1);
 }
 
-static char	*addline (char *str, char **line, int point, int *rslt)
+static char	*addline (char **staticstr, char **line, int point, int *rslt)
 {
 	int	count;
 	int	len;
 
-	if (str == NULL && point == 0)
+	if (*staticstr == NULL && point == 0)
 	{
 		*line = ft_strdup("");
 		return (0);
 	}
-	count = findc(str, '\n');
-	len = ft_strlen(str);
+	count = findc(*staticstr, '\n');
+	len = ft_strlen(*staticstr);
 	if (count != -1)
 		*rslt = 1;
-	if (*str == '\n')
+	if (*staticstr[0] == '\n')
 		*line = ft_strdup("");
 	else if (point == 0 && count < 1)
 	{
-		*line = ft_substr(str, 0, len);
+		*line = ft_substr(*staticstr, 0, len);
 		return (0);
 	}
 	else
-		*line = ft_substr(str, 0, count);
+		*line = ft_substr(*staticstr, 0, count);
 	if (count + 1 < len)
-		return (ft_substr(str, count + 1, len));
+		return (ft_substr(*staticstr, count + 1, len));
 	return (0);
 }
 
-static int	save_in_static(int point, char **str, char *buf, int *rslt)
+static int	save_in_static(char **str, char *buf, int *rslt)
 {
 	char	*back;
 
-	buf[point] = 0;
 	if (*str == NULL)
 		*str = ft_strdup(buf);
 	else
@@ -100,7 +99,7 @@ int	get_next_line(int fd, char **line)
 {
 	int			point;
 	char		*buf;
-	static char	*strstatic;
+	static char	*strstatic[1000];
 	int			rslt;
 	char		*back;
 
@@ -111,15 +110,16 @@ int	get_next_line(int fd, char **line)
 	point = read(fd, buf, BUFFER_SIZE);
 	while (point > 0)
 	{
-		if (save_in_static(point, &strstatic, buf, &rslt) == 1)
+		buf[point] = 0;
+		if (save_in_static(&strstatic[fd], buf, &rslt) == 1)
 			break ;
 		point = read(fd, buf, BUFFER_SIZE);
 	}
 	free(buf);
 	if (point < 0 || line == NULL || BUFFER_SIZE <= 0)
 		return (-1);
-	back = addline(strstatic, *&line, point, &rslt);
-	free(strstatic);
-	strstatic = back;
+	back = addline(&strstatic[fd], line, point, &rslt);
+	free(strstatic[fd]);
+	strstatic[fd] = back;
 	return (rslt);
 }
