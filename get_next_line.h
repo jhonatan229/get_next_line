@@ -5,7 +5,6 @@
 # include <stdlib.h>
 # include <stddef.h>
 # include <unistd.h>
-# include <fcntl.h>
 
 int			get_next_line(int fd, char **line);
 void		*ft_memcpy(void *to, const void *from, size_t numBytes);
